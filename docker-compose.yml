@@ -1,0 +1,26 @@
+version: '3'
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./dockerizing:/usr/src/app
+    expose:
+      - "8000"
+    networks:
+      - backend
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./dockerizing:/usr/src/app
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - backend
+    depends_on:
+      - django
+networks:
+  backend:
+    driver: bridge
